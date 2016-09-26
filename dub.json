@@ -1,6 +1,6 @@
 {
     "name": "util",
-    "description": "Simple string utilities.",
+    "description": "Misc. utilities.",
     "copyright": "Copyright © 2015, Michael Fadely",
     "authors": [ "Michael Fadely" ],
     "targetType": "library",
