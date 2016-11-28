@@ -817,7 +817,6 @@
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
  <Folder name="util">
-  <File path="getopt.d" />
   <File path="modifiable.d" />
   <File path="package.d" />
   <File path="string.d" />
