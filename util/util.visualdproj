@@ -819,6 +819,7 @@
  <Folder name="util">
   <File path="modifiable.d" />
   <File path="package.d" />
+  <File path="sizesuffix.d" />
   <File path="string.d" />
   <File path="unittests.d" />
  </Folder>

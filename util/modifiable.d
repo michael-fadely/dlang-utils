@@ -21,13 +21,16 @@ struct Modifiable(_T)
 
 		static if (hasUDA!(mixin("_T." ~ name), Modifier))
 		{
-			mixin(format(`
-					if (!modified && wrapped.%s != value)
-						modified = true;`, name));
+			mixin(format(
+					`if (!modified && wrapped.%s != value)
+					{
+						modified = true;
+					}`, name));
 		}
 
 		mixin(`return wrapped.` ~ name ~ ` = value;`);
 	}
+
 	auto opDispatch(string name, Args...)(Args args)
 	{
 		version (unittest) pragma(msg, "wrapping: " ~ name);
