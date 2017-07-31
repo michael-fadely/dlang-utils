@@ -2,9 +2,21 @@ module util.string;
 
 import std.algorithm;
 import std.array;
+import std.conv : to;
 import std.regex;
 import std.uni : isWhite;
 
+/**
+	Strips escape characters from the given string.
+
+	Params:
+		str = The string to be stripped.
+		escapeDelim = Optional escape delimiter. Defaults to '\'.
+
+	Returns:
+		If no escape characters are present, the input string is returned.
+		Otherwise, a stripped copy is returned.
+*/
 @safe string stripEscape(in string str, char escapeDelim = '\\')
 {
 	if (!canFind(str, escapeDelim))
@@ -12,9 +24,7 @@ import std.uni : isWhite;
 		return str;
 	}
 
-	Appender!string result;
-	str.filter!(c => c != escapeDelim).each!(c => result.put(c));
-	return result.data;
+	return to!string(str.filter!(c => c != escapeDelim));
 }
 
 // TODO: Rename
@@ -30,7 +40,7 @@ import std.uni : isWhite;
 		return result.data;
 	}
 
-	for (size_t i = 0; i <= str.length; i++)
+	for (size_t i; i <= str.length; i++)
 	{
 		if (i == str.length)
 		{
@@ -57,12 +67,12 @@ import std.uni : isWhite;
 		}
 
 		auto c = str[i];
-		
+
 		if (allowEscape && (escape = (c == escapeDelim)) == true)
 		{
 			continue;
 		}
-		
+
 		if (!allowEscape || !escape)
 		{
 			if (c == '"')
@@ -91,33 +101,29 @@ import std.uni : isWhite;
 
 	return result.data;
 }
-
-private static const char[] escape = [ '\\', '*', '+', '?', '[', ']', '{', '}', '(', ')', '.', '^', '$' ];
-/// Escapes characters used for regular expression.
-/// If no characters need escaping, the input string is returned.
-@safe string regexEscape(string str)
+///
+unittest
 {
-	if (str.all!(x => !escape.canFind(x)))
-	{
-		return str;
-	}
+	string[] result = ArgsToArray(`This is my string "with \"substring\"" and\ escape\ characters`);
+	
+	assert(result.length == 6);
+	assert(result == ["This", "is", "my", "string", "with \"substring\"", "and escape characters"]);
 
-	Appender!string result;
-
-	foreach (c; str)
-	{
-		if (escape.canFind(c))
-		{
-			result.put('\\');
-		}
-
-		result.put(c);
-	}
-
-	return result.data;
+	result = ArgsToArray(`This\ is\ a\ whole\ string`);
+	assert(result.length == 1);
+	assert(result == ["This is a whole string"]);
 }
-/// Converts standard wildcard string containing * and/or ? to a regular expression sting.
-/// If no conversion is required, the input string is returned.
+
+/**
+	Converts standard wildcard string containing * and/or ? to a regular expression sting.
+
+	Params:
+		str = The string to be converted.
+
+	Returns:
+		A copy of the input string.
+		If no conversion is required, the input string is returned.
+*/
 @safe string wildToRegex(string str)
 {
 	if (!str.canFind('*') && !str.canFind('?'))
@@ -125,11 +131,21 @@ private static const char[] escape = [ '\\', '*', '+', '?', '[', ']', '{', '}', 
 		return str;
 	}
 
-	auto result = str.regexEscape();
+	auto result = to!string(escaper(str));
 	result = result.replace(`\*`, `.*`).replace(`\?`, `.{1}`);
 	return result;
 }
-/// Checks for pattern match in target.
+
+/**
+	Checks `target` for the patching wildcard string in `pattern`.
+
+	Params:
+		target = The string to search.
+		pattern = The wildcard pattern to search for in `target`.
+
+	Returns:
+		`true` if a match has been found.
+*/
 @safe bool match(string target, string pattern)
 {
 	auto regex_str = wildToRegex(pattern);
@@ -141,4 +157,12 @@ private static const char[] escape = [ '\\', '*', '+', '?', '[', ']', '{', '}', 
 	auto r = regex(regex_str);
 	auto m = matchAll(target, r);
 	return !m.empty;
+}
+///
+unittest
+{
+	string a = "Neko?sama@402AF8.*.235237";
+	string b = "Neko-sama@402AF8.ECFE3D.3E8072.235237";
+	assert(b.match(a));
+	assert(b.match(b));
 }
