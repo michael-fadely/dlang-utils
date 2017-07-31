@@ -5,6 +5,7 @@ import std.string : format;
 
 private static const string[] suffixes = [ "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
 
+/// Takes an input size in bytes and returns a size-suffix string.
 @safe string sizeSuffix(size_t value)
 {
 	if (value < 0)
@@ -26,4 +27,24 @@ private static const string[] suffixes = [ "bytes", "KB", "MB", "GB", "TB", "PB"
 	}
 
 	return format("%0.2f%s", dValue, suffixes[i]);
+}
+///
+unittest
+{
+	string str;
+
+	str = sizeSuffix(100);
+	assert(str == "100 bytes");
+
+	str = sizeSuffix(1024);
+	assert(str == "1.00 KB");
+
+	str = sizeSuffix(1024 * 1024);
+	assert(str == "1.00 MB");
+
+	str = sizeSuffix(1024 * 1024 * 1024);
+	assert(str == "1.00 GB");
+
+	str = sizeSuffix(7_864_320);
+	assert(str == "7.50 GB");
 }

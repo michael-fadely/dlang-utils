@@ -2,13 +2,17 @@
 Some common things I use in my D projects.
 
 # Module Overview
+## util.array
+when `std.algorithm.searching` just won't do the job
+
 ## util.modifiable
 Contains a template structure `Modifiable!YourType` that raises a flag when the value of members marked with the `@Modifier` attribute in your structure have changed. The field `bool modified;` indicates the modified state of your structure. This can be useful, for example, to determine when to serialize a structure to disk.
 
-## util.string
-### `regexEscape`
-Replaces common regular expression characters with their escape codes. If no escaping is necessary, the input string is returned.
+## util.sizesuffix
+### `sizeSuffix`
+Takes an input "size" in bytes and returns a size-suffix string. e.g `sizeSuffix(1024)` returns the string `1.00 KB`.
 
+## util.string
 ### `wildToRegex`
 Converts your typical wildcard pattern string (containing `*` for any-character match, and `?` for single-character match) into a regular expression.
 
