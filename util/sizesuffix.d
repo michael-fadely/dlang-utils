@@ -1,9 +1,9 @@
 module util.sizesuffix;
 
 import std.math;
-import std.string : format;
+import std.format : format;
 
-private static const string[] suffixes = [ "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
+private static immutable string[] suffixes = [ "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" ];
 
 /// Takes an input size in bytes and returns a size-suffix string.
 @safe string sizeSuffix(size_t value)
@@ -15,7 +15,7 @@ private static const string[] suffixes = [ "bytes", "KB", "MB", "GB", "TB", "PB"
 
 	if (value < 1024)
 	{
-		return format("%u %s", value, suffixes[0]);
+		return format!("%u %s")(value, suffixes[0]);
 	}
 
 	int i;
@@ -26,7 +26,7 @@ private static const string[] suffixes = [ "bytes", "KB", "MB", "GB", "TB", "PB"
 		i++;
 	}
 
-	return format("%0.2f%s", dValue, suffixes[i]);
+	return format!("%0.2f%s")(dValue, suffixes[i]);
 }
 ///
 unittest
@@ -34,7 +34,7 @@ unittest
 	string str;
 
 	str = sizeSuffix(100);
-	assert(str == "100 bytes");
+	assert(str == "100 B");
 
 	str = sizeSuffix(1024);
 	assert(str == "1.00 KB");
