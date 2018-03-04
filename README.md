@@ -19,7 +19,7 @@ Converts your typical wildcard pattern string (containing `*` for any-character 
 ### `match`
 Checks for a wildcard match in the target by converting the pattern to a regular expression using `wildToRegex`, and then running `std.regex.matchAll` on the target.
 
-### `ArgsToArray` (needs renaming)
+### `argsToArray` (needs renaming)
 Converts a string into an array of strings split by space, except where escape characters are concerned.
 
 For example, this string:

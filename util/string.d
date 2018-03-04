@@ -28,11 +28,11 @@ import std.uni : isWhite;
 }
 
 // TODO: Rename
-@safe string[] ArgsToArray(in string str, bool allowEscape = true, char escapeDelim = '\\')
+@safe string[] argsToArray(in string str, bool allowEscape = true, char escapeDelim = '\\')
 {
 	Appender!(string[]) result;
-	bool escape = false;
-	bool quote = false;
+
+	bool escape, quote;
 	size_t start;
 
 	if (str.length < 1)
@@ -104,12 +104,12 @@ import std.uni : isWhite;
 ///
 unittest
 {
-	string[] result = ArgsToArray(`This is my string "with \"substring\"" and\ escape\ characters`);
+	string[] result = argsToArray(`This is my string "with \"substring\"" and\ escape\ characters`);
 	
 	assert(result.length == 6);
 	assert(result == ["This", "is", "my", "string", "with \"substring\"", "and escape characters"]);
 
-	result = ArgsToArray(`This\ is\ a\ whole\ string`);
+	result = argsToArray(`This\ is\ a\ whole\ string`);
 	assert(result.length == 1);
 	assert(result == ["This is a whole string"]);
 }
@@ -137,7 +137,7 @@ unittest
 }
 
 /**
-	Checks `target` for the patching wildcard string in `pattern`.
+	Checks `target` for the matching wildcard string in `pattern`.
 
 	Params:
 		target = The string to search.
@@ -148,13 +148,14 @@ unittest
 */
 @safe bool match(string target, string pattern)
 {
-	auto regex_str = wildToRegex(pattern);
-	if (regex_str == pattern)
+	auto regexString = wildToRegex(pattern);
+
+	if (regexString == pattern)
 	{
 		return target == pattern;
 	}
 
-	auto r = regex(regex_str);
+	auto r = regex(regexString);
 	auto m = matchAll(target, r);
 	return !m.empty;
 }
