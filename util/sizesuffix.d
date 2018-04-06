@@ -26,7 +26,7 @@ private static immutable string[] suffixes = [ "B", "KB", "MB", "GB", "TB", "PB"
 		i++;
 	}
 
-	return format!("%0.2f%s")(dValue, suffixes[i]);
+	return format!("%0.2f %s")(dValue, suffixes[i]);
 }
 ///
 unittest
