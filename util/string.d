@@ -10,7 +10,7 @@ import std.uni : isWhite;
 	Strips escape characters from the given string.
 
 	Params:
-		str = The string to be stripped.
+		str         = The string to be stripped.
 		escapeDelim = Optional escape delimiter. Defaults to '\'.
 
 	Returns:
@@ -27,8 +27,24 @@ import std.uni : isWhite;
 	return to!string(str.filter!(c => c != escapeDelim));
 }
 
-// TODO: Rename
-@safe string[] argsToArray(in string str, bool allowEscape = true, char escapeDelim = '\\')
+/**
+	Return an array of strings tokenized by whitespace.
+
+	For example, given this string:
+		`` `This is my string "with \"substring\"" and\ escape\ characters` ``
+
+	This function will return the array:
+		`` [ `This`, `is`, `my`, `string`, `with "substring"`, `and escape characters` ]``
+
+	Params:
+		str         = The string to be tokenized.
+		allowEscape = Allow escape characters.
+		escapeDelim = The escape delimiter.
+
+	Returns:
+		An array of `string` containing the tokenized elements of `str`.
+*/
+@safe string[] tokenize(in string str, bool allowEscape = true, char escapeDelim = '\\')
 {
 	Appender!(string[]) result;
 
@@ -104,14 +120,14 @@ import std.uni : isWhite;
 ///
 unittest
 {
-	string[] result = argsToArray(`This is my string "with \"substring\"" and\ escape\ characters`);
+	string[] result = tokenize(`This is my string "with \"substring\"" and\ escape\ characters`);
 	
 	assert(result.length == 6);
-	assert(result == ["This", "is", "my", "string", "with \"substring\"", "and escape characters"]);
+	assert(result == [ "This", "is", "my", "string", "with \"substring\"", "and escape characters" ]);
 
-	result = argsToArray(`This\ is\ a\ whole\ string`);
+	result = tokenize(`This\ is\ a\ whole\ string`);
 	assert(result.length == 1);
-	assert(result == ["This is a whole string"]);
+	assert(result == [ "This is a whole string" ]);
 }
 
 /**
@@ -140,7 +156,7 @@ unittest
 	Checks `target` for the matching wildcard string in `pattern`.
 
 	Params:
-		target = The string to search.
+		target  = The string to search.
 		pattern = The wildcard pattern to search for in `target`.
 
 	Returns:

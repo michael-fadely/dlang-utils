@@ -19,13 +19,13 @@ Converts your typical wildcard pattern string (containing `*` for any-character 
 ### `match`
 Checks for a wildcard match in the target by converting the pattern to a regular expression using `wildToRegex`, and then running `std.regex.matchAll` on the target.
 
-### `argsToArray` (needs renaming)
+### `tokenize`
 Converts a string into an array of strings split by space, except where escape characters are concerned.
 
-For example, this string:
+For example, given this string:
 
 `` `This is my string "with \"substring\"" and\ escape\ characters` ``
 
-becomes this array:
+This function will return the array:
 
 `` [ `This`, `is`, `my`, `string`, `with "substring"`, `and escape characters` ]``
