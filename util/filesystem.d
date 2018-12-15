@@ -9,7 +9,12 @@ ulong getFreeSpace(in string dir)
 		import core.sys.windows.windows;
 
 		ULARGE_INTEGER space;
-		GetDiskFreeSpaceExA(dir.toStringz(), &space, null, null);
+
+		if (!GetDiskFreeSpaceExA(dir.toStringz(), &space, null, null))
+		{
+			return 0;
+		}
+
 		return space.QuadPart;
 	}
 	else version (Posix)
@@ -38,7 +43,12 @@ ulong getCapacity(in string dir)
 		import core.sys.windows.windows;
 
 		ULARGE_INTEGER space;
-		GetDiskFreeSpaceExA(dir.toStringz(), null, &space, null);
+
+		if (!GetDiskFreeSpaceExA(dir.toStringz(), null, &space, null))
+		{
+			return 0;
+		}
+
 		return space.QuadPart;
 	}
 	else version (Posix)
