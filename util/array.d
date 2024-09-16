@@ -1,5 +1,7 @@
 module util.array;
 
+import std.algorithm.comparison : min;
+
 // TODO: tests
 
 /**
@@ -20,7 +22,7 @@ R[] takeUntil(alias pred, R)(ref R[] arr)
 		if (pred(e))
 		{
 			auto result = arr[0 .. i];
-			arr = arr[(i > $ ? $ : i) .. $];
+			arr = arr[min(i, $) .. $];
 			return result;
 		}
 	}
@@ -46,7 +48,7 @@ R[] takeUntil(R)(ref R[] arr, in R element)
 		if (e == element)
 		{
 			auto result = arr[0 .. i];
-			arr = arr[(i > $ ? $ : i) .. $];
+			arr = arr[min(i, $) .. $];
 			return result;
 		}
 	}
@@ -72,7 +74,7 @@ R[] takeUntilAny(R)(ref R[] arr, R[] a)
 		if (a.any!((x) => x == e))
 		{
 			auto result = arr[0 .. i];
-			arr = arr[(i > $ ? $ : i) .. $];
+			arr = arr[min(i, $) .. $];
 			return result;
 		}
 	}
@@ -98,7 +100,7 @@ R[] takeWhile(alias pred, R)(ref R[] arr)
 		if (!pred(e))
 		{
 			auto result = arr[0 .. i];
-			arr = arr[(i > $ ? $ : i) .. $];
+			arr = arr[min(i, $) .. $];
 			return result;
 		}
 	}
@@ -127,7 +129,7 @@ R[] takeWhile(R)(ref R[] arr, in R element)
 		}
 
 		auto result = arr[0 .. i];
-		arr = arr[(i > $ ? $ : i) .. $];
+		arr = arr[min(i, $) .. $];
 		return result;
 	}
 
@@ -155,7 +157,7 @@ R[] takeWhileAny(R)(ref R[] arr, R[] a)
 		}
 
 		auto result = arr[0 .. i];
-		arr = arr[(i > $ ? $ : i) .. $];
+		arr = arr[min(i, $) .. $];
 		return result;
 	}
 
