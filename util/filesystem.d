@@ -73,20 +73,3 @@ ulong getCapacity(in string dir)
 		static assert(false, "Not implemented on this platform.");
 	}
 }
-
-size_t getDirSize(in string path)
-{
-	import std.file : dirEntries, SpanMode;
-
-	size_t result;
-
-	foreach (entry; dirEntries(path, SpanMode.breadth))
-	{
-		if (entry.isFile)
-		{
-			result += entry.size;
-		}
-	}
-
-	return result;
-}
