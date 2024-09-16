@@ -6,7 +6,8 @@ ulong getFreeSpace(in string dir)
 {
 	version (Windows)
 	{
-		import core.sys.windows.windows;
+		import core.sys.windows.windows : ULARGE_INTEGER,
+		                                  GetDiskFreeSpaceExA;
 
 		ULARGE_INTEGER space;
 
@@ -19,7 +20,8 @@ ulong getFreeSpace(in string dir)
 	}
 	else version (Posix)
 	{
-		import core.sys.posix.sys.statvfs;
+		import core.sys.posix.sys.statvfs : statvfs_t,
+		                                    statvfs;
 
 		statvfs_t space;
 
@@ -40,7 +42,8 @@ ulong getCapacity(in string dir)
 {
 	version (Windows)
 	{
-		import core.sys.windows.windows;
+		import core.sys.windows.windows : ULARGE_INTEGER,
+		                                  GetDiskFreeSpaceExA;
 
 		ULARGE_INTEGER space;
 
@@ -53,10 +56,11 @@ ulong getCapacity(in string dir)
 	}
 	else version (Posix)
 	{
-		import core.sys.posix.sys.statvfs;
+		import core.sys.posix.sys.statvfs : statvfs_t,
+		                                    statvfs;
 
 		statvfs_t space;
-		
+
 		if (statvfs(dir.toStringz(), &space) != 0)
 		{
 			return 0;
@@ -72,8 +76,8 @@ ulong getCapacity(in string dir)
 
 size_t getDirSize(in string path)
 {
-	import std.file;
-	
+	import std.file : dirEntries, SpanMode;
+
 	size_t result;
 
 	foreach (entry; dirEntries(path, SpanMode.breadth))
